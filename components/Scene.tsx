@@ -1,9 +1,35 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { Canvas, useThree, useFrame } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, GizmoHelper, GizmoViewport, Text } from '@react-three/drei';
+import { EffectComposer, N8AO } from '@react-three/postprocessing';
 import { Product } from '../types';
 import { FilamentNode } from './FilamentNode';
 import * as THREE from 'three';
+
+// Augment JSX namespace to recognize React Three Fiber intrinsic elements
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      group: any;
+      arrowHelper: any;
+      gridHelper: any;
+      ambientLight: any;
+      pointLight: any;
+    }
+  }
+}
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      group: any;
+      arrowHelper: any;
+      gridHelper: any;
+      ambientLight: any;
+      pointLight: any;
+    }
+  }
+}
 
 interface SceneProps {
   allProducts: Product[];
@@ -25,6 +51,9 @@ const hexToRgb = (hex: string) => {
 
 // Axis System with labels
 const AxisSystem = ({ isDark }: { isDark: boolean }) => {
+  const ticks = [0, 50, 100, 150, 200, 250];
+  const tickColor = isDark ? "#cccccc" : "#222222";
+
   return (
     <group>
         {/* Axes Arrows (Length 280) */}
@@ -36,6 +65,58 @@ const AxisSystem = ({ isDark }: { isDark: boolean }) => {
         <Text position={[300, 0, 0]} color="#ff4444" fontSize={12} anchorX="left">RED (X)</Text>
         <Text position={[0, 300, 0]} color="#44ff44" fontSize={12} anchorY="bottom">GREEN (Y)</Text>
         <Text position={[0, 0, 300]} color="#4444ff" fontSize={12} anchorX="left">BLUE (Z)</Text>
+
+        {/* Numerical Ticks */}
+        {ticks.map(val => {
+            if (val === 0) return null; // Skip 0 to avoid clutter at origin
+            return (
+              <group key={val}>
+                {/* X Axis Ticks */}
+                <Text 
+                  position={[val, -10, 0]} 
+                  color={tickColor} 
+                  fontSize={10} 
+                  anchorX="center" 
+                  anchorY="top"
+                >
+                  {val}
+                </Text>
+                
+                {/* Y Axis Ticks */}
+                <Text 
+                  position={[-10, val, 0]} 
+                  color={tickColor} 
+                  fontSize={10} 
+                  anchorX="right" 
+                  anchorY="middle"
+                >
+                  {val}
+                </Text>
+                
+                {/* Z Axis Ticks */}
+                <Text 
+                  position={[0, -10, val]} 
+                  color={tickColor} 
+                  fontSize={10} 
+                  anchorX="center" 
+                  anchorY="top"
+                >
+                  {val}
+                </Text>
+              </group>
+            );
+        })}
+        
+        {/* Origin Label */}
+        <Text 
+            position={[-5, -5, -5]} 
+            color={tickColor} 
+            fontSize={10} 
+            anchorX="right" 
+            anchorY="top"
+        >
+            0
+        </Text>
 
         {/* Floor Grid positioned to cover positive octant roughly */}
         <gridHelper 
@@ -173,6 +254,15 @@ const SceneContent = ({ allProducts, visibleProductIds, onNodeHover, isDark }: S
       <GizmoHelper alignment="bottom-right" margin={[80, 80]}>
          <GizmoViewport axisColors={['#ff0000', '#00ff00', '#0000ff']} labelColor="white" />
       </GizmoHelper>
+
+      <EffectComposer disableNormalPass={false}>
+         <N8AO 
+            aoRadius={20} 
+            distanceFalloff={2} 
+            intensity={1.5} 
+            color="black"
+         />
+      </EffectComposer>
     </>
   );
 }
@@ -185,6 +275,7 @@ export const Scene: React.FC<SceneProps> = (props) => {
         onPointerDown={(e) => (e.target as HTMLElement).style.cursor = 'grabbing'}
         onPointerUp={(e) => (e.target as HTMLElement).style.cursor = 'grab'}
         onPointerMissed={() => props.onNodeHover(null)}
+        gl={{ antialias: true }}
       >
         <SceneContent {...props} />
       </Canvas>

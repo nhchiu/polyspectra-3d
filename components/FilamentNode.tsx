@@ -4,6 +4,25 @@ import { Sphere, Text, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
 import { Product } from '../types';
 
+// Augment JSX namespace to recognize React Three Fiber intrinsic elements
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      group: any;
+      meshStandardMaterial: any;
+    }
+  }
+}
+
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      group: any;
+      meshStandardMaterial: any;
+    }
+  }
+}
+
 interface FilamentNodeProps {
   products: Product[]; // Now accepts an array (Cluster)
   position: [number, number, number];
@@ -89,8 +108,9 @@ export const FilamentNode: React.FC<FilamentNodeProps> = ({ products, position, 
           metalness={0.1}
           emissive={hovered && isVisible ? displayColor : '#000000'}
           emissiveIntensity={hovered && isVisible ? 0.4 : 0}
-          transparent
+          transparent={isCluster}
           opacity={isCluster ? 0.9 : 1}
+          depthWrite={true} // Important for AO
         />
       </Sphere>
 
