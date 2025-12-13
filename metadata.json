@@ -1,0 +1,5 @@
+{
+  "name": "PolySpectra 3D",
+  "description": "An interactive 3D visualization of Polymaker filament products, mapping their physical colors to a 3D RGB coordinate space.",
+  "requestFramePermissions": []
+}
