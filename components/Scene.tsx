@@ -255,7 +255,7 @@ const SceneContent = ({ allProducts, visibleProductIds, onNodeHover, isDark }: S
          <GizmoViewport axisColors={['#ff0000', '#00ff00', '#0000ff']} labelColor="white" />
       </GizmoHelper>
 
-      <EffectComposer disableNormalPass={false}>
+      <EffectComposer enableNormalPass={true}>
          <N8AO 
             aoRadius={20} 
             distanceFalloff={2} 
