@@ -14,15 +14,6 @@ declare global {
   }
 }
 
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      meshStandardMaterial: any;
-    }
-  }
-}
-
 interface FilamentNodeProps {
   products: Product[]; // Now accepts an array (Cluster)
   position: [number, number, number];
@@ -42,19 +33,25 @@ export const FilamentNode: React.FC<FilamentNodeProps> = ({ products, position, 
   const displayColor = useMemo(() => {
     if (count === 1) return products[0].hex;
 
-    let r = 0, g = 0, b = 0;
+    let rSum = 0, gSum = 0, bSum = 0;
     products.forEach(p => {
         const fullHex = p.hex.replace(/^#?([a-f\d])([a-f\d])([a-f\d])$/i, (m, r, g, b) => r + r + g + g + b + b);
         const res = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(fullHex);
         if (res) {
-            r += parseInt(res[1], 16);
-            g += parseInt(res[2], 16);
-            b += parseInt(res[3], 16);
+            const r = parseInt(res[1], 16);
+            const g = parseInt(res[2], 16);
+            const b = parseInt(res[3], 16);
+            
+            // Use Root Mean Square (RMS) for physically accurate color mixing
+            rSum += r * r;
+            gSum += g * g;
+            bSum += b * b;
         }
     });
-    r = Math.round(r / count);
-    g = Math.round(g / count);
-    b = Math.round(b / count);
+    
+    const r = Math.round(Math.sqrt(rSum / count));
+    const g = Math.round(Math.sqrt(gSum / count));
+    const b = Math.round(Math.sqrt(bSum / count));
     
     return `rgb(${r},${g},${b})`;
   }, [products, count]);
@@ -104,13 +101,12 @@ export const FilamentNode: React.FC<FilamentNodeProps> = ({ products, position, 
       <Sphere args={[baseRadius, 32, 32]}>
         <meshStandardMaterial
           color={displayColor}
-          roughness={0.3}
-          metalness={0.1}
-          emissive={hovered && isVisible ? displayColor : '#000000'}
-          emissiveIntensity={hovered && isVisible ? 0.4 : 0}
-          transparent={isCluster}
-          opacity={isCluster ? 0.9 : 1}
-          depthWrite={true} // Important for AO
+          roughness={0.5}
+          metalness={0.1} 
+          emissive={displayColor} 
+          emissiveIntensity={hovered && isVisible ? 0.4 : 0.15} 
+          transparent={false} // Solid nodes ensure better color representation
+          depthWrite={true} 
         />
       </Sphere>
 

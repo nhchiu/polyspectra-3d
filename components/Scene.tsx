@@ -19,18 +19,6 @@ declare global {
   }
 }
 
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      arrowHelper: any;
-      gridHelper: any;
-      ambientLight: any;
-      pointLight: any;
-    }
-  }
-}
-
 interface SceneProps {
   allProducts: Product[];
   visibleProductIds: Set<string>;
@@ -259,7 +247,7 @@ const SceneContent = ({ allProducts, visibleProductIds, onNodeHover, isDark }: S
          <N8AO 
             aoRadius={20} 
             distanceFalloff={2} 
-            intensity={1.5} 
+            intensity={1.0} 
             color="black"
          />
       </EffectComposer>
@@ -275,7 +263,7 @@ export const Scene: React.FC<SceneProps> = (props) => {
         onPointerDown={(e) => (e.target as HTMLElement).style.cursor = 'grabbing'}
         onPointerUp={(e) => (e.target as HTMLElement).style.cursor = 'grab'}
         onPointerMissed={() => props.onNodeHover(null)}
-        gl={{ antialias: true }}
+        gl={{ antialias: true, toneMapping: THREE.NoToneMapping }}
       >
         <SceneContent {...props} />
       </Canvas>

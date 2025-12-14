@@ -214,9 +214,9 @@ export default function App() {
   const tooltipStyle = isMobile 
     ? {} 
     : {
-      left: Math.min(cursorPos.x + 20, window.innerWidth - 300), 
+      left: Math.min(cursorPos.x + 20, window.innerWidth - 340), // Increased buffer for wider card
       top: Math.min(cursorPos.y - 50, window.innerHeight - 300), 
-      width: '280px'
+      width: '320px' // Increased width
     };
     
   const tooltipClass = isMobile
@@ -367,10 +367,20 @@ export default function App() {
                              />
                              <div className="flex-1 min-w-0">
                                <div className="flex justify-between items-center mr-2">
-                                 <span className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate">{p.name}</span>
+                                 <span 
+                                    className="font-semibold text-sm text-gray-900 dark:text-gray-100 truncate"
+                                    title={p.name}
+                                 >
+                                    {p.name}
+                                 </span>
                                  <span className="text-[10px] font-mono text-gray-400 dark:text-gray-500 bg-gray-100 dark:bg-gray-700/50 px-1.5 py-0.5 rounded ml-2">{p.hex}</span>
                                </div>
-                               <div className="text-xs text-gray-500 dark:text-gray-400 truncate">{p.product}</div>
+                               <div 
+                                  className="text-xs text-gray-500 dark:text-gray-400 truncate"
+                                  title={p.product}
+                               >
+                                  {p.product}
+                               </div>
                              </div>
                          </a>
                          
