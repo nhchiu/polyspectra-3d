@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Scene } from './components/Scene';
 import { InfoPanel } from './components/InfoPanel';
-import { fetchPolymakerData } from './services/geminiService';
+import { fetchPolymakerData } from './services/polymakerService';
 import { Product } from './types';
 import { ExternalLink, AlertTriangle, Layers, Menu, Eye, ArrowLeft } from 'lucide-react';
 

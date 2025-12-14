@@ -84,7 +84,7 @@ If you want to host it elsewhere (Netlify, Vercel, etc.):
 *   `src/components/Scene.tsx`: Main 3D scene setup (Camera, Lights, Controls).
 *   `src/components/FilamentNode.tsx`: Individual 3D node component representing a product or cluster.
 *   `src/components/InfoPanel.tsx`: The UI overlay for search, filtering, and settings.
-*   `src/services/geminiService.ts`: Handles fetching and parsing data from the Polymaker API.
+*   `src/services/polymakerService.ts`: Handles fetching and parsing data from the Polymaker API.
 *   `src/App.tsx`: Main application logic and state management.
 
 ## 📄 License
