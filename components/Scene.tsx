@@ -6,19 +6,6 @@ import { Product } from '../types';
 import { FilamentNode } from './FilamentNode';
 import * as THREE from 'three';
 
-// Augment JSX namespace to recognize React Three Fiber intrinsic elements
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      arrowHelper: any;
-      gridHelper: any;
-      ambientLight: any;
-      pointLight: any;
-    }
-  }
-}
-
 interface SceneProps {
   allProducts: Product[];
   visibleProductIds: Set<string>;

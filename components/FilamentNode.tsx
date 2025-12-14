@@ -4,16 +4,6 @@ import { Sphere, Text, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
 import { Product } from '../types';
 
-// Augment JSX namespace to recognize React Three Fiber intrinsic elements
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      meshStandardMaterial: any;
-    }
-  }
-}
-
 interface FilamentNodeProps {
   products: Product[]; // Now accepts an array (Cluster)
   position: [number, number, number];

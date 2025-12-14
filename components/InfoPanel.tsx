@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Download, RefreshCw, Box, Filter, Search, Check, CheckSquare, Square, Moon, Sun, Monitor, Loader2, X } from 'lucide-react';
+import { Download, RefreshCw, Box, Filter, Search, Check, CheckSquare, Square, Moon, Sun, Monitor, Loader2, X, Github } from 'lucide-react';
 import { ThemeMode } from '../App';
 
 interface InfoPanelProps {
@@ -100,12 +100,21 @@ export const InfoPanel: React.FC<InfoPanelProps> = ({
         <div className="p-2 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-lg shadow-lg">
           <Box className="w-6 h-6 text-white" />
         </div>
-        <div>
+        <div className="flex-1">
           <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-900 to-gray-600 dark:from-white dark:to-gray-400">
             PolySpectra 3D
           </h1>
           <p className="text-xs text-gray-500 dark:text-gray-400">Filament Catalog Visualizer</p>
         </div>
+        <a 
+          href="https://github.com/nhchiu/polyspectra-3d" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-gray-900 dark:text-gray-500 dark:hover:text-white transition-colors"
+          title="View on GitHub"
+        >
+          <Github className="w-5 h-5" />
+        </a>
       </div>
 
       <div className="flex items-center justify-between mb-6 shrink-0">

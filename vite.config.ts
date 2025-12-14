@@ -7,6 +7,9 @@ export default defineConfig({
   // Sets the base path for deployment. './' ensures assets are found relative to index.html,
   // which works for GitHub Pages regardless of the repo name.
   base: './',
+  resolve: {
+    dedupe: ['three', 'react', 'react-dom'],
+  },
   build: {
     target: 'esnext',
   },
