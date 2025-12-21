@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Download, RefreshCw, Box, Filter, Search, Check, CheckSquare, Square, Moon, Sun, Monitor, Loader2, X, Github } from 'lucide-react';
 import { ThemeMode } from '../App';
 
@@ -47,6 +47,13 @@ export const InfoPanel: React.FC<InfoPanelProps> = ({
 }) => {
   const [showExportConfirm, setShowExportConfirm] = useState(false);
 
+  // Calculate the number of items that will be exported based on selected categories
+  const exportableCount = useMemo(() => {
+    return categories
+      .filter(c => selectedCategories.includes(c))
+      .reduce((acc, c) => acc + (categoryCounts[c] || 0), 0);
+  }, [categories, selectedCategories, categoryCounts]);
+
   if (isMobile && !isOpen) return null;
 
   const containerClass = isMobile
@@ -63,7 +70,7 @@ export const InfoPanel: React.FC<InfoPanelProps> = ({
             </div>
             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Export Data?</h3>
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-6">
-                Are you sure you want to export the current catalog?
+                Are you sure you want to export the <b>{exportableCount}</b> products from the selected categories?
             </p>
             <div className="flex gap-3 w-full">
                 <button 
@@ -251,8 +258,12 @@ export const InfoPanel: React.FC<InfoPanelProps> = ({
 
         <button
           onClick={() => setShowExportConfirm(true)}
-          disabled={totalCount === 0}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+          disabled={exportableCount === 0}
+          className={`w-full flex items-center justify-center gap-2 py-2.5 rounded-lg border transition-colors ${
+            exportableCount === 0
+              ? 'bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-400 cursor-not-allowed'
+              : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800'
+          }`}
         >
           <Download className="w-4 h-4" />
           Export JSON

@@ -1,8 +1,15 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react';
-import { useFrame, useThree } from '@react-three/fiber';
+import { useFrame, useThree, ThreeElements } from '@react-three/fiber';
 import { Sphere, Text, Billboard } from '@react-three/drei';
 import * as THREE from 'three';
 import { Product } from '../types';
+
+// Fix for TypeScript not recognizing R3F elements in JSX.IntrinsicElements
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends ThreeElements {}
+  }
+}
 
 interface FilamentNodeProps {
   products: Product[]; // Now accepts an array (Cluster)

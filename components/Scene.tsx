@@ -1,10 +1,17 @@
 import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { Canvas, useThree, useFrame } from '@react-three/fiber';
+import { Canvas, useThree, useFrame, ThreeElements } from '@react-three/fiber';
 import { OrbitControls, PerspectiveCamera, GizmoHelper, GizmoViewport, Text } from '@react-three/drei';
 import { EffectComposer, N8AO } from '@react-three/postprocessing';
 import { Product } from '../types';
 import { FilamentNode } from './FilamentNode';
 import * as THREE from 'three';
+
+// Fix for TypeScript not recognizing R3F elements in JSX.IntrinsicElements
+declare global {
+  namespace JSX {
+    interface IntrinsicElements extends ThreeElements {}
+  }
+}
 
 interface SceneProps {
   allProducts: Product[];

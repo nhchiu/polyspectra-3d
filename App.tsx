@@ -169,14 +169,19 @@ export default function App() {
   const handleClearAllCategories = () => setSelectedCategories([]);
 
   const handleExport = () => {
-    const dataStr = JSON.stringify(products, null, 2);
+    // Export based on selected categories (material filter), ignoring search query
+    const filteredProducts = products.filter(p => selectedCategories.includes(p.category));
+    
+    const dataStr = JSON.stringify(filteredProducts, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "polymaker_products.json";
+    link.download = `polymaker_catalog_filtered_${new Date().toISOString().split('T')[0]}.json`;
     document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handleRefresh = () => initDataFetch();
